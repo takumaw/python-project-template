@@ -1,0 +1,53 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Create Environment",
+            "type": "shell",
+            "command": "hatch env create",
+            "group": "none",
+            "presentation": {
+                "reveal": "never",
+                "revealProblems": "onProblem",
+                "panel": "new",
+                "close": true
+            }
+        },
+        {
+            "label": "Run tests",
+            "type": "shell",
+            "command": "hatch run test",
+            "group": "test",
+        },
+        {
+            "label": "Run tests with coverage report",
+            "type": "shell",
+            "command": "hatch run test-cov",
+            "group": "test",
+        },
+        {
+            "label": "Build package",
+            "type": "shell",
+            "command": "hatch build",
+            "group": "build",
+        },
+        {
+            "label": "Build API documents",
+            "type": "shell",
+            "command": "hatch run docs:build",
+            "group": "build",
+        },
+        {
+            "label": "Lint",
+            "type": "shell",
+            "command": "hatch run lint:all",
+            "group": "none",
+        },
+        {
+            "label": "Format code",
+            "type": "shell",
+            "command": "hatch run lint:format",
+            "group": "none",
+        }
+    ]
+}

@@ -1,0 +1,278 @@
+[build-system]
+requires = ["hatchling>=1.17.1"]
+build-backend = "hatchling.build"
+
+[project]
+name = "my-project"
+description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+readme = "README.md"
+license = { text = "Proprietary" }
+authors = [
+  { name = "Some One", email = "someone@example.com" },
+]
+keywords = []
+classifiers = [
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.9"
+dependencies = [
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/someone/my-project"
+Tracker = "https://github.com/someone/my-project/issues"
+Source = "https://github.com/someone/my-project"
+
+[project.scripts]
+my-project = "my_project.__main__:main"
+
+[tool.hatch.version]
+path = "my_project/__version__.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.gitlab-ci.yml",
+  "/.gitignore",
+  "/.vscode",
+  "/docs",
+]
+
+[tool.hatch.publish.index.repos.private]
+url = "https://pypi.example.com"
+user = "oauth2"
+
+[tool.hatch.envs.default]
+type = "virtual"
+path = ".venv"
+dependencies = [
+  "coverage[toml]>=6.5",
+  "pytest",
+  "pytest-cov",
+  "pytest-mock",
+  "pytest-xdist[psutil]",
+  "python-dotenv",
+]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:} tests"
+test-cov = "pytest --cov --cov-config=pyproject.toml {args:} tests"
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.9", "3.10", "3.11"]
+
+[tool.hatch.envs.docs]
+dependencies = [
+  "click-man",
+  "myst-parser",
+  "sphinx",
+  "sphinx-click",
+  "sphinx_rtd_theme",
+  "sphinx_fontawesome",
+]
+
+[tool.hatch.envs.docs.scripts]
+build = [
+  "sphinx-apidoc --module-first --separate --force -o docs/modules my_project",
+  "sphinx-build -b html docs docs/_build",
+]
+build-man = "click-man my-project"
+
+[tool.hatch.envs.lint]
+detached = true
+dependencies = [
+  "black>=23.3.0",
+  "mypy>=1.4.0",
+  "ruff>=0.0.275",
+]
+[tool.hatch.envs.lint.scripts]
+_mypy = "mypy --install-types --non-interactive {args:} my_project tests"
+_ruff = "ruff check {args:} my_project tests"
+_black = "black {args:} my_project tests"
+style = """
+  ruff check my_project tests; RUFF_RET_CODE=$?;
+  black --check --diff --color my_project tests; BLACK_RET_CODE=$?;
+  if [ "$RUFF_RET_CODE" = "0" ] && [ "$BLACK_RET_CODE" = "0" ]; then
+    exit 0
+  else
+    exit 1
+  fi
+"""
+typing = "_mypy"
+all = """
+  ruff check my_project tests; RUFF_RET_CODE=$?;
+  black --check --diff --color my_project tests; BLACK_RET_CODE=$?;
+  mypy --install-types --non-interactive my_project tests; MYPY_RET_CODE=$?;
+  if [ "$RUFF_RET_CODE" = "0" ] && [ "$BLACK_RET_CODE" = "0" ] && [ "$MYPY_RET_CODE" = "0" ]; then
+    exit 0
+  else
+    exit 1
+  fi
+"""
+format = """
+  ruff check --fix my_project tests;
+  black my_project tests
+"""
+
+[tool.pytest.ini_options]
+addopts = "-n auto"
+markers = [
+]
+
+[tool.coverage.run]
+source_pkgs = ["my_project"]
+branch = true
+parallel = true
+omit = []
+
+[tool.coverage.paths]
+my_project = ["my_project"]
+tests = ["tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.black]
+line-length = 120
+target-version = ["py39"]
+skip-string-normalization = true
+
+[tool.ruff]
+src = ["my_project", "test"]
+target-version = "py39"
+line-length = 120
+select = [
+  "ALL",
+]
+ignore = [
+  # *args の型のアノテーションを不要に
+  "ANN002",
+  # **kwargs の型のアノテーションを不要に
+  "ANN003",
+  # self には型アノテーションを不要に (※ Python 3.11 を前提とした際は Self が容易に使えるようになるので除去)
+  "ANN101",
+  # cls には型アノテーションを不要に
+  "ANN102",
+  # special method の返却型のアノテーションを不要に
+  "ANN204",
+  # Any アノテーションを許容
+  "ANN401",
+  # 未使用のループ変数を許容
+  "B007",
+  # 複雑な関数を許容
+  "C901",
+  # マジックメソッドの docstring が無いことを許容
+  "D105",
+  # class の docstring は class 宣言の直後にする(=D211)
+  # D203 は docstring と class 宣言の間に空行があることを要求し
+  # D211 と矛盾するため、D203 を無効化する
+  "D203",
+  # function の docstring のサマリ行を、開始行にする。(=D212)
+  # D213 はサマリ行を開始行の次の行にすることを要求し D212 を矛盾
+  # するため、D213 を無効化する
+  "D213",
+  # docstring の末尾が . で終わらないことを無視
+  "D400",
+  "D415",
+  # エラーメッセージ内で string、f-string 使用を許容
+  "EM101",
+  "EM102",
+  # コメントアウトを許容
+  "ERA001",
+  # 使われていない import を無視
+  "F401",
+  # プレースホルダ―なき f-string を許容
+  "F541",
+  # 未使用の変数を許容
+  "F841",
+  # PEP 604 の Union アノテーションを、__future__ からのインポートなしに利用許可
+  "FA102",
+  # ブールポジショナル引数を許容
+  "FBT001",
+  # ブールデフォルト値を許容
+  "FBT002",
+  # TODO の使用を許容
+  "FIX002",
+  # ロギングにおける f-string を許容
+  "G004",
+  # 文字列の明示的な結合を許可
+  "ISC003",
+  # 大文字パッケージ名のインポートを許容
+  "N812",
+  # return の多さを許容
+  "PLR0911",
+  # if の多さを許容
+  "PLR0912",
+  # param の多さを許容
+  "PLR0913",
+  # statement の多さを許容
+  "PLR0915",
+  # magic value の利用を許容
+  "PLR2004",
+  # リターン前の変数定義を許容
+  "RET504",
+  # リターン後の elif を許容
+  "RET505",
+  # リターン後の else を許容
+  "RET506",
+  # ternary operator の使用を強制しない
+  "SIM108",
+  # if 分岐の or による結合を強制しない
+  "SIM114",
+  # プライベートメンバへのアクセスを許容
+  "SLF001",
+  # TODO に author を記載しないことを許容
+  "TD002",
+  # TODO に issue link を記載しないことを許容
+  "TD003",
+  # 長いエラーメッセージを許容
+  "TRY003",
+]
+unfixable = [
+]
+builtins = [
+  "_",
+]
+
+[tool.ruff.isort]
+known-first-party = ["my_project"]
+known-local-folder = ["my_project"]
+
+[tool.ruff.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.per-file-ignores]
+# CLI では型アノテーションを不要にする
+"my_project/__main__.py" = [
+  # 型アノテーションの不在を許容
+  "ANN",
+]
+# テストでは柔軟な記述を許容する
+"tests/**/*" = [
+  # 型アノテーションの不在を許容
+  "ANN",
+  # 長い行を許容
+  "E501",
+  # CamelCase でないクラス名を許容
+  "N801",
+  # assert の利用を許容
+  "S101",
+]
+# ドキュメントの設定ファイルは無視
+"docs/**/*" = [
+  "ALL",
+]
