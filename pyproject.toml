@@ -153,8 +153,10 @@ skip-string-normalization = true
 
 [tool.ruff]
 src = ["my_project", "test"]
-target-version = "py39"
+show-fixes = true
 line-length = 120
+target-version = "py39"
+required-version = "0.0.284"
 select = [
   "ALL",
 ]
@@ -246,16 +248,6 @@ ignore = [
 ]
 unfixable = [
 ]
-builtins = [
-  "_",
-]
-
-[tool.ruff.isort]
-known-first-party = ["my_project"]
-known-local-folder = ["my_project"]
-
-[tool.ruff.flake8-tidy-imports]
-ban-relative-imports = "all"
 
 [tool.ruff.per-file-ignores]
 # CLI では型アノテーションを不要にする
@@ -278,3 +270,28 @@ ban-relative-imports = "all"
 "docs/**/*" = [
   "ALL",
 ]
+
+[tool.ruff.flake8-annotations]
+ignore-fully-untyped = false
+allow-star-arg-any = false
+
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "double"
+multiline-quotes = "double"
+
+[tool.ruff.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.isort]
+known-first-party = ["my_project"]
+known-local-folder = ["my_project"]
+
+[tool.ruff.pep8-naming]
+classmethod-decorators = ["pydantic.validator"]
+
+[tool.ruff.pycodestyle]
+ignore-overlong-task-comments = true
+
+[tool.ruff.pydocstyle]
+ignore-decorators = ["typing.overload"]
