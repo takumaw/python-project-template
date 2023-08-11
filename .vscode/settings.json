@@ -2,12 +2,13 @@
     "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
     "python.envFile": "${workspaceFolder}/.env",
     "python.analysis.extraPaths": [
-        "${workspaceFolder}/.venv/lib/*/site-packages"
+        "${workspaceFolder}/.venv/lib/*/site-packages",
     ],
     "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": true,
     "python.testing.pytestArgs": [
         "--config-file ${workspaceFolder}/.pyproject.toml",
+        "--cache-dir ${workspaceFolder}/.pytest_cache",
     ],
     "black-formatter.importStrategy": "fromEnvironment",
     "black-formatter.args": [
@@ -16,9 +17,11 @@
     "ruff.enable": true,
     "ruff.importStrategy": "fromEnvironment",
     "ruff.args": [
-        "--config ${workspaceFolder}/.pyproject.toml"
+        "--config ${workspaceFolder}/.pyproject.toml",
+        "--cache-dir ${workspaceFolder}/.ruff_cache",
     ],
     "mypy-type-checker.args": [
-        "--config-file ${workspaceFolder}/.pyproject.toml"
+        "--config-file ${workspaceFolder}/.pyproject.toml",
+        "--cache-dir ${workspaceFolder}/.mypy_cache",
     ],
 }
