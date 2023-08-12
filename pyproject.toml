@@ -161,23 +161,25 @@ select = [
   "ALL",
 ]
 ignore = [
-  # *args の型のアノテーションを不要に
-  "ANN002",
-  # **kwargs の型のアノテーションを不要に
-  "ANN003",
-  # self には型アノテーションを不要に (※ Python 3.11 を前提とした際は Self が容易に使えるようになるので除去)
-  "ANN101",
-  # cls には型アノテーションを不要に
-  "ANN102",
-  # special method の返却型のアノテーションを不要に
-  "ANN204",
-  # Any アノテーションを許容
-  "ANN401",
-  # 未使用のループ変数を許容
-  "B007",
+  ## Pyflakes (F)
+  # 使われていない import を無視
+  "F401",
+  # プレースホルダ―なき f-string を許容
+  "F541",
+  # 未使用の変数を許容
+  "F841",
+  # 未使用の型アノテーション付き変数を許容
+  "F842",
+  ## pycodestyle (E, W)
+  ## mccabe (C90)
   # 複雑な関数を許容
   "C901",
-  # マジックメソッドの docstring が無いことを許容
+  ## isort (I)
+  ## pep8-naming (N)
+  # 大文字パッケージ名のインポートを許容
+  "N812",
+  ## pydocstyle (D)
+  # magic method の docstring が無いことを許容
   "D105",
   # class の docstring は class 宣言の直後にする(=D211)
   # D203 は docstring と class 宣言の間に空行があることを要求し
@@ -189,32 +191,122 @@ ignore = [
   "D213",
   # docstring の末尾が . で終わらないことを無視
   "D400",
+  # docstring が命令調でないことを許容
+  "D401",
   "D415",
+  ## pyupgrade (UP)
+  ## flake8-2020 (YTT)
+  ## flake8-annotations (ANN)
+  # *args の型のアノテーションを不要に
+  "ANN002",
+  # **kwargs の型のアノテーションを不要に
+  "ANN003",
+  # self には型アノテーションを不要に
+  # Python 3.11 を前提とした際は Self が容易に使えるようになるので除去
+  "ANN101",
+  # cls には型アノテーションを不要に
+  "ANN102",
+  # special method の返却型のアノテーションを不要に
+  "ANN204",
+  ## flake8-async (ASYNC)
+  ## flake8-bandit (S)
+  ## flake8-blind-except (BLE)
+  ## flake8-boolean-trap (FBT)
+  # ブール型引数を許容
+  "FBT001",
+  # ブール型引数のデフォルト値を許容
+  "FBT002",
+  ## flake8-bugbear (B)
+  ## flake8-builtins (A)
+  ## flake8-commas (COM)
+  ## flake8-copyright (CPY)
+  ## flake8-comprehensions (C4)
+  ## flake8-datetimez (DTZ)
+  ## flake8-debugger (T10)
+  ## flake8-django (DJ)
+  ## flake8-errmsg (EM)
   # エラーメッセージ内で string、f-string 使用を許容
   "EM101",
   "EM102",
-  # コメントアウトを許容
-  "ERA001",
-  # 使われていない import を無視
-  "F401",
-  # プレースホルダ―なき f-string を許容
-  "F541",
-  # 未使用の変数を許容
-  "F841",
-  # PEP 604 の Union アノテーションを、__future__ からのインポートなしに利用許可
+  ## flake8-executable (EXE)
+  ## flake8-future-annotations (FA)
+  # PEP 563 の型アノテーションを __future__ からのインポートなしに利用許可
+  "FA100",
+  # PEP 604 の Union アノテーションを __future__ からのインポートなしに利用許可
   "FA102",
-  # ブールポジショナル引数を許容
-  "FBT001",
-  # ブールデフォルト値を許容
-  "FBT002",
-  # TODO の使用を許容
-  "FIX002",
-  # ロギングにおける f-string を許容
-  "G004",
+  ## flake8-implicit-str-concat (ISC)
   # 文字列の明示的な結合を許可
   "ISC003",
-  # 大文字パッケージ名のインポートを許容
-  "N812",
+  ## flake8-import-conventions (ICN)
+  ## flake8-logging-format (G)
+  # ロギングにおける + を許容
+  "G003",
+  # ロギングにおける f-string を許容
+  "G004",
+  ## flake8-no-pep420 (INP)
+  ## flake8-pie (PIE)
+  ## flake8-print (T20)
+  ## flake8-pyi (PYI)
+  ## flake8-pytest-style (PT)
+  ## flake8-quotes (Q)
+  ## flake8-raise (RSE)
+  ## flake8-return (RET)
+  # return 前の変数定義を許容
+  "RET504",
+  # return 後の else を許容
+  "RET505",
+  # raise 後の else を許容
+  "RET506",
+  # continue 後の else を許容
+  "RET507",
+  # break 後の else を許容
+  "RET508",
+  ## flake8-self (SLF)
+  ## flake8-slots (SLOT)
+  ## flake8-simplify (SIM)
+  # if の折りたたみを強制しない
+  "SIM102",
+  # except-pass を許容
+  "SIM105",
+  # ternary operator の使用を強制しない
+  "SIM108",
+  # any の使用を強制しない
+  "SIM110",
+  # if 分岐の or による結合を強制しない
+  "SIM114",
+  # if-else を dict lookup へ置き換えることを強制しない
+  "SIM116",
+  # x-if-not-s-else-y を許容
+  "SIM212",
+  # if-else を dict lookup へ置き換えることを強制しない
+  "SIM401",
+  ## flake8-tidy-imports (TID)
+  ## flake8-type-checking (TCH)
+  ## flake8-gettext (INT)
+  ## flake8-unused-arguments (ARG)
+  ## flake8-use-pathlib (PTH)
+  ## flake8-todos (TD)
+  # FIXME、XXX の使用を許容
+  "TD001",
+  # TODO に author を記載しないことを許容
+  "TD002",
+  # TODO に issue link を記載しないことを許容
+  "TD003",
+  ## flake8-fixme (FIX)
+  # FIXME の使用を許容
+  "FIX001",
+  # TODO の使用を許容
+  "FIX002",
+  # XXX の使用を許容
+  "FIX003",
+  # HACK の使用を許容
+  "FIX004",
+  ## flake8-eradicate (ERA)
+  # コメントアウトを許容
+  "ERA001",
+  ## pandas-vet (PD)
+  ## pygrep-hooks (PGH)
+  ## Pylint (PL)
   # return の多さを許容
   "PLR0911",
   # if の多さを許容
@@ -225,36 +317,27 @@ ignore = [
   "PLR0915",
   # magic value の利用を許容
   "PLR2004",
-  # リターン前の変数定義を許容
-  "RET504",
+  # else-if の折りたたみを強制しない
+  "PLR5501",
+  ## tryceratops (TRY)
+  # エラーメッセージを直接発出することを許容
+  "TRY003",
+  ## flynt (FLY)
+  ## NumPy-specific rules (NPY)
+  ## Airflow (AIR)
+  ## Perflint (PERF)
+  ## Ruff-specific rules (RUF)
   # 文字列中の全角文字を許容
   "RUF001",
-  # リターン後の elif を許容
-  "RET505",
-  # リターン後の else を許容
-  "RET506",
-  # ternary operator の使用を強制しない
-  "SIM108",
-  # if 分岐の or による結合を強制しない
-  "SIM114",
-  # プライベートメンバへのアクセスを許容
-  "SLF001",
-  # TODO に author を記載しないことを許容
-  "TD002",
-  # TODO に issue link を記載しないことを許容
-  "TD003",
-  # 長いエラーメッセージを許容
-  "TRY003",
+  # docstring 中の全角文字を許容
+  "RUF002",
+  # コメント中の全角文字を許容
+  "RUF003",
 ]
 unfixable = [
 ]
 
 [tool.ruff.per-file-ignores]
-# CLI では型アノテーションを不要にする
-"my_project/__main__.py" = [
-  # 型アノテーションの不在を許容
-  "ANN",
-]
 # テストでは柔軟な記述を許容する
 "tests/**/*" = [
   # 型アノテーションの不在を許容
@@ -272,8 +355,9 @@ unfixable = [
 ]
 
 [tool.ruff.flake8-annotations]
-ignore-fully-untyped = false
 allow-star-arg-any = false
+ignore-fully-untyped = false
+mypy-init-return = true
 
 [tool.ruff.flake8-quotes]
 docstring-quotes = "double"
