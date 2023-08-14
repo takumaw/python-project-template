@@ -10,12 +10,10 @@
         "--config-file ${workspaceFolder}/.pyproject.toml",
         "--cache-dir ${workspaceFolder}/.pytest_cache",
     ],
-    "black-formatter.importStrategy": "fromEnvironment",
     "black-formatter.args": [
         "--config ${workspaceFolder}/.pyproject.toml"
     ],
     "ruff.enable": true,
-    "ruff.importStrategy": "fromEnvironment",
     "ruff.args": [
         "--config ${workspaceFolder}/.pyproject.toml",
         "--cache-dir ${workspaceFolder}/.ruff_cache",
