@@ -24,4 +24,11 @@
         "--config-file ${workspaceFolder}/.pyproject.toml",
         "--cache-dir ${workspaceFolder}/.mypy_cache",
     ],
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.fixAll": true
+        },
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+    },
 }
