@@ -147,14 +147,14 @@ exclude_lines = [
 ignore_missing_imports = true
 
 [tool.black]
-line-length = 120
+line-length = 150
 target-version = ["py39"]
 skip-string-normalization = true
 
 [tool.ruff]
 src = ["my_project", "test"]
 show-fixes = true
-line-length = 120
+line-length = 150
 target-version = "py39"
 required-version = "0.0.284"
 select = [
@@ -371,7 +371,6 @@ ban-relative-imports = "all"
 
 [tool.ruff.isort]
 known-first-party = ["my_project"]
-known-local-folder = ["my_project"]
 
 [tool.ruff.pep8-naming]
 classmethod-decorators = ["pydantic.validator"]
