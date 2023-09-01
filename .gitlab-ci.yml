@@ -13,7 +13,7 @@ cache:
 #- template: Code-Quality.gitlab-ci.yml
 
 .setup_python:
-  image: python:3.11
+  image: python:3.9
   variables:
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
     WORKON_HOME: "$CI_PROJECT_DIR/.cache/venv"
@@ -52,8 +52,40 @@ pages:
     paths:
       - public
 
-test:
+test-python3.9:
   extends: .setup_python
+  stage: test
+  needs: []
+  script:
+    - hatch run test-cov --junitxml=report.xml --cov-report term --cov-report xml:coverage.xml
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+
+test-python3.10:
+  extends: .setup_python
+  image: python:3.10
+  stage: test
+  needs: []
+  script:
+    - hatch run test-cov --junitxml=report.xml --cov-report term --cov-report xml:coverage.xml
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+
+test-python3.11:
+  extends: .setup_python
+  image: python:3.10
   stage: test
   needs: []
   script:
@@ -72,7 +104,6 @@ lint:
   stage: lint
   needs: []
   script:
-    # To enable GitLab Code Quality, uncomment lines below.
     #- apt update && apt install -y jq
     #- pip3 install mypy-gitlab-code-quality
     - hatch run lint:_ruff
@@ -80,7 +111,6 @@ lint:
     - hatch run lint:_mypy
     #- hatch run lint:_mypy | PYTHONHASHSEED=0 mypy-gitlab-code-quality > gl-codequality-mypy.json
     - hatch run lint:_black --check --diff --color
-    # TODO: Convert black result to GitLab Code Quality format.
     #- jq -s '[.[][]]' gl-codequality-*.json > gl-codequality.json
   allow_failure: true
   #artifacts:
@@ -93,7 +123,9 @@ publish:
   stage: publish
   needs:
     - package
-    - test
+    - test-python3.9
+    - test-python3.10
+    - test-python3.11
   script:
     - hatch publish -r ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi -u gitlab-ci-token -a ${CI_JOB_TOKEN}
   rules:

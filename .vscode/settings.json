@@ -2,7 +2,9 @@
     "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python3",
     "python.envFile": "${workspaceFolder}/.env",
     "python.analysis.extraPaths": [
-        "${workspaceFolder}/.venv/lib/*/site-packages",
+        "${workspaceFolder}/.venv/lib/python3.9/site-packages",
+        "${workspaceFolder}/.venv/lib/python3.10/site-packages",
+        "${workspaceFolder}/.venv/lib/python3.11/site-packages",
     ],
     "python.testing.cwd": "${workspaceFolder}",
     "python.testing.pytestEnabled": true,

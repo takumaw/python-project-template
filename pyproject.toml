@@ -90,9 +90,13 @@ detached = true
 dependencies = [
   "black>=23.3.0",
   "mypy>=1.4.0",
-  "ruff>=0.0.275",
+  "ruff==0.0.285", # lint を安定化するためバージョンを固定
 ]
 [tool.hatch.envs.lint.scripts]
+# list で定義した場合、途中のコマンドで失敗した場合、後続のコマンドが実行されない。
+# 先頭に "- "を付与することでエラーコードを無視できるが、その場合 hatch run 時にも
+# エラーコードが伝播しない。そのため、いずれかのコマンドが失敗した場合でも後続のコマンドを実行する、
+# かつ、いずれかのコマンドが失敗した場合にはエラーコードを出力するよう、手動でスクリプトを組む。
 _mypy = "mypy --install-types --non-interactive {args:} my_project tests"
 _ruff = "ruff check {args:} my_project tests"
 _black = "black {args:} my_project tests"
@@ -156,7 +160,6 @@ src = ["my_project", "test"]
 show-fixes = true
 line-length = 150
 target-version = "py39"
-required-version = "0.0.284"
 select = [
   "ALL",
 ]
